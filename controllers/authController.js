@@ -34,20 +34,39 @@ const createSendToken = (user, statusCode, res) => {
       user
     }
   });
-  
+
   //res.redirect('/');
 };
 
+exports.updatePublicKey = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  User.findOneAndUpdate({
+    _id: req.body.userId
+  },
+  {
+    block_id: req.body.publicKey
+  }, (error, updatedUser) => {
+    if(error) {
+      console.log("error");
+    } else {
+      createSendToken(updatedUser, 201, res);
+    }
+  })
+
+});
+
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  let user = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
-  });
+  }
+
+  const newUser = await User.create(user);
 
   createSendToken(newUser, 201, res);
-      
+
 });
 
 exports.dashboard = catchAsync(async (req, res, next) => {

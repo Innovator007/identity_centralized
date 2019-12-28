@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email']
   },
-//  photo: String,
+  //  photo: String,
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -27,23 +27,18 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please confirm your password'],
     validate: {
       // This only works on CREATE and SAVE!!!
-      validator: function(el) {
+      validator: function (el) {
         return el === this.password;
       },
       message: 'Passwords are not the same!'
     }
+  },
+  block_id: {
+    type: String
   }
-//   passwordChangedAt: Date,
-//   passwordResetToken: String,
-//   passwordResetExpires: Date,
-//   active: {
-//     type: Boolean,
-//     default: true,
-//     select: false
-//   }
 });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
 
@@ -68,7 +63,7 @@ userSchema.pre('save', async function(next) {
 //   next();
 // });
 
-userSchema.methods.correctPassword = async function(
+userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
