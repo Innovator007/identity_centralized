@@ -50,6 +50,10 @@ exports.signup = catchAsync(async (req, res, next) => {
       
 });
 
+exports.dashboard = catchAsync(async (req, res, next) => {
+  res.render("dashboard.ejs");
+});
+
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
