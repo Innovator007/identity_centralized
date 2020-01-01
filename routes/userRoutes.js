@@ -4,7 +4,29 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-router.post('/signup', authController.signup);
+// Sign Up Routers
+///User
+router.get('/user', (req, res, next) => {
+    res.render('userSignupForm');
+});
+router.post('/user', authController.userSignup);
+
+//Authority
+router.get('/authority', (req, res, next) => {
+    res.render('authoritySignupForm')
+});
+router.post('/authority', authController.authSignup);
+
+//Verifier
+router.get('/verifier', (req, res, next) => {
+    res.render('verifierSignupForm');
+});
+router.post('/verifier', authController.verSignup);
+
+//Login
+router.get('/login', (req, res, next) => {
+    res.render('login');
+});
 router.post('/login', authController.login);
 
 router.get('/dashboard', authController.dashboard);

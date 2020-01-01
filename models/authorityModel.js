@@ -4,7 +4,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 // For User
-const userSchema = new mongoose.Schema({
+const authoritySchema = new mongoose.Schema({
   name: {
     type: String,
     //required: [true, 'Please tell us your name!']
@@ -34,12 +34,14 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!'
     }
   },
-  block_id: {
-    type: String
+  auth_id: {
+    type: Number,
+    //required : [true, 'Please provide your authority ID'],
+    unique : true
   }
 });
 
-userSchema.pre('save', async function (next) {
+authoritySchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
 
@@ -51,27 +53,13 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.methods.correctPassword = async function (
+authoritySchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-const User = mongoose.model('User', userSchema);
+const Authority = mongoose.model('Authority', authoritySchema);
 
-module.exports = User;
-
-
-// userSchema.pre('save', function(next) {
-//   if (!this.isModified('password') || this.isNew) return next();
-
-//   this.passwordChangedAt = Date.now() - 1000;
-//   next();
-// });
-
-// userSchema.pre(/^find/, function(next) {
-//   // this points to the current query
-//   this.find({ active: { $ne: false } });
-//   next();
-// });
+module.exports = Authority;

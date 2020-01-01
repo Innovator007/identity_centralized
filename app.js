@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const bodyParser = require('body-parser');
 
 // const AppError = require('./utils/appError');
 // const globalErrorHandler = require('./controllers/errorController');
@@ -18,7 +19,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
-
+app.use(bodyParser.urlencoded({ extended: false }));
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
 app.use(helmet());
@@ -37,12 +38,12 @@ app.use(xss());
 
 
 // Serving static files
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static('./public/assets'));
 
 
 // 3) ROUTES
 
+app.use('/signup', userRouter);
 app.use('/', userRouter);
-app.use(testRouter);
 
 module.exports = app;
