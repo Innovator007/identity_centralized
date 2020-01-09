@@ -6,10 +6,10 @@ const router = express.Router();
 
 // Sign Up Routers
 ///User
-router.get('/user', (req, res, next) => {
-    res.render('userSignupForm');
-});
-router.post('/user', authController.userSignup);
+// router.get('/user', (req, res, next) => {
+//     res.render('userSignupForm');
+// });
+// router.post('/user', authController.userSignup);
 
 //Authority
 router.get('/authority', (req, res, next) => {
