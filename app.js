@@ -11,7 +11,6 @@ const bodyParser = require('body-parser');
 // const globalErrorHandler = require('./controllers/errorController');
 // const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
-const testRouter = require('./routes/test');
 
 const app = express();
 
@@ -43,7 +42,6 @@ app.use(express.static('./public/assets'));
 
 // 3) ROUTES
 
-app.use('/signup', userRouter);
 app.use('/', userRouter);
 
 module.exports = app;

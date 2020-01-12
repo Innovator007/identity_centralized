@@ -59,6 +59,15 @@ exports.updatePublicKey = catchAsync(async (req, res, next) => {
 
 });
 
+exports.signupSelect = catchAsync(async (req, res, next) => {
+  let { role } = req.body;
+  let redirectSignup = {
+    authority: '/signup/authority',
+    verifier: '/signup/verifier'
+  };
+  res.redirect(redirectSignup[role]);
+});
+
 exports.userSignup = catchAsync(async (req, res, next) => {
   
   let user = {

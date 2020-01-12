@@ -12,16 +12,27 @@ const router = express.Router();
 // router.post('/user', authController.userSignup);
 
 //Authority
-router.get('/authority', (req, res, next) => {
-    res.render('authoritySignupForm')
+
+router.get('/', (req, res, next) => {
+	res.redirect('/login');
 });
-router.post('/authority', authController.authSignup);
+
+router.get('/signup', (req, res, next) => {
+	res.render('signupSelect');
+});
+
+router.post('/signup', authController.signupSelect);
+
+router.get('/signup/authority', (req, res, next) => {
+    res.render('authoritySignupForm');
+});
+router.post('/signup/authority', authController.authSignup);
 
 //Verifier
-router.get('/verifier', (req, res, next) => {
+router.get('/signup/verifier', (req, res, next) => {
     res.render('verifierSignupForm');
 });
-router.post('/verifier', authController.verSignup);
+router.post('/signup/verifier', authController.verSignup);
 
 //Login
 router.get('/login', (req, res, next) => {

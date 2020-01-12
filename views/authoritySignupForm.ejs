@@ -1,39 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign up</title>
-</head>
-<body>
-    <form action="/signup/authority" method="POST" style="border:1px solid #ccc">
-        <div class="container">
-            <h1>Sign Up</h1>
-            <p>Please fill in this form to create an account.</p>
-            <hr>
-        
-        
-            <label for="name"><b>Name</b></label>
-            <input type="text" placeholder="Enter name" name="name" required>
-        
-            <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required>
+<html lang="en" dir="ltr">
 
-            <label for="auth_if"><b>Authority ID</b></label>
-            <input type="text" placeholder="Enter Email" name="auth_id" required>
-        
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
-        
-            <label for="psw-repeat"><b>Confirm Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="passwordConfirm" required>
-        
-            <div class="clearfix">
-                <button type="button" class="cancelbtn">Cancel</button>
-                <button type="submit" class="signupbtn">Sign Up</button>
+<!-- Mirrored from spruko.com/demo/adon/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Dec 2018 09:46:44 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Fully Responsive Bootstrap 4 Admin Dashboard Template">
+    <meta name="author" content="Creative Tim">
+    
+
+    <!-- Title -->
+    <title>Adon - Creative Admin Multipurpose Responsive Dashboard Template</title>
+
+    <!-- Favicon -->
+    <link href="/img/brand/favicon.png" rel="icon" type="image/png">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="/css/icons.css" rel="stylesheet">
+
+    <!--Bootstrap.min css-->
+    <link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css">
+
+    <!-- Adon CSS -->
+    <link href="/css/dashboard.css" rel="stylesheet" type="text/css">
+
+    <!-- Single-page CSS -->
+    <link href="/plugins/single-page/css/main.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="bg-gradient-primary">
+    <div class="limiter">
+        <div class="container-login100">
+                
+            <div class="wrap-login100 p-5"> 
+                <form action="/signup/authority" method="POST" class="login100-form validate-form">
+                    <div class="logo-img text-center pb-3">
+                        <img src="/img/brand/logo-dark1.png" alt="logo-img">
+                    </div>
+                    <span class="login100-form-title">
+                        Authority Signup
+                    </span>
+                    
+                    <div class="wrap-input100 validate-input">
+                        <input class="input100" type="text" name="name" id="plcholder" placeholder="Name">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                        <input class="input100" type="text" name="email" id="plcholder" placeholder="Email Id">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <input class="input100" type="text" name="auth_id" id="plcholder" placeholder="Authority ID">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                        <input class="input100" type="password" name="password" placeholder="Password">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate = "Confirm Password is required">
+                        <input class="input100" type="password" name="passwordConfirm" placeholder="Confirm Password">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <button type="submit" class="btn login100-form-btn btn-primary btn-pill mt-1 mb-1">Signup</button>
+                    </div>
+
+                    <div class="text-center pt-1">
+                        <a class="txt2" href="/login">
+                            Already have an account?
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
-    </form> 
+    </div>
+
+    <!-- Adon Scripts -->
+    <!-- Core -->
+    <script src="/plugins/jquery/dist/jquery.min.js"></script>
+    <script src="/js/popper.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+
 </body>
+
+<!-- Mirrored from spruko.com/demo/adon/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Dec 2018 09:46:44 GMT -->
 </html>
