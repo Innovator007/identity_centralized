@@ -32,6 +32,11 @@ router.post('/signup/authority', authController.authSignup);
 router.get('/signup/verifier', (req, res, next) => {
     res.render('verifierSignupForm');
 });
+
+router.get('/dashboard/authority', (req, res, next) => {
+	res.render('Auth_dashboard');
+});
+
 router.post('/signup/verifier', authController.verSignup);
 
 //Login
