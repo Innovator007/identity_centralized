@@ -37,6 +37,8 @@ router.get('/dashboard/authority', (req, res, next) => {
 	res.render('Auth_dashboard');
 });
 
+router.post('/dashboard/authority', authController.userRegister);
+
 router.post('/signup/verifier', authController.verSignup);
 
 //Login

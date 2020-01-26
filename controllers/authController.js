@@ -68,18 +68,18 @@ exports.signupSelect = catchAsync(async (req, res, next) => {
   res.redirect(redirectSignup[role]);
 });
 
-exports.userSignup = catchAsync(async (req, res, next) => {
+exports.userRegister = catchAsync(async (req, res, next) => {
   
   let user = {
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm
+    password: req.body.phone
+    
   }
   const newUser = await User.create(user);
   
   createSendToken(newUser, 201, res);
-  res.redirect('/login');
+  res.redirect('/dashboard/authority');
 });
 
 exports.authSignup = catchAsync(async (req, res, next) => {
