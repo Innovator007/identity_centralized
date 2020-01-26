@@ -149,7 +149,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
-    res.redirect('/dashboard');
+    res.redirect('/dashboard/authority');
     //createSendToken(user, 200, res);
   }
 
