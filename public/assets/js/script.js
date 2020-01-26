@@ -94,19 +94,15 @@ $(document).ready(function(){
 		}
 
 		$("#aadharRemover").click(function(){
-			console.log("inside aadhar remover");
 			$("#aadhar").remove();
 		})
 		$("#DLRemover").click(function(){
-			console.log("inside aadhar remover");
 			$("#DL").remove();
 		})
 		$("#passportRemover").click(function(){
-			console.log("inside aadhar remover");
 			$("#passport").remove();
 		})
 		$("#panRemover").click(function(){
-			console.log("inside aadhar remover");
 			$("#pan").remove();
 		})
 	})
