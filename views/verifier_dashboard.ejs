@@ -1,0 +1,52 @@
+<%- include ('./partials/authentication_header.ejs') %>
+
+						<!-- Page content -->
+						<div class="container-fluid pt-8">
+							
+									<div class="card shadow">
+										<div class="card-header">
+											<h2 class="mb-0">Client Details</h2>
+										</div>
+										<div class="card-body">
+
+											<div class="form-group">
+												<label class="form-label">Name</label>
+												<input type="text" class="form-control" name="example-text-input" placeholder="Enter name here">
+											</div>
+
+											<div class="form-group">
+												<label class="form-label">Email Id</label>
+												<input type="text" class="form-control" name="example-text-input" placeholder="Enter mail-id here">
+											</div>
+
+											<div class="form-group">
+												<label class="form-label">Phone Number</label>
+												<input type="text" class="form-control" name="example-text-input" placeholder="Enter number here">
+											</div>
+
+											<div class="form-group">
+												<label class="form-label">Cards</label>
+												<select name="country" id="select-countries" class="form-control custom-select">
+													<option value="br" data-data='{"image": "assets/images/flags/br.svg"}' selected="">Adhar Card</option>
+													<option value="cz" data-data='{"image": "assets/images/flags/cz.svg"}'>Pan Card</option>
+													<option value="de" data-data='{"image": "assets/images/flags/de.svg"}'>Passport</option>
+													<option value="pl" data-data='{"image": "assets/images/flags/pl.svg"}'>Driving License</option>
+
+												</select>
+											</div>
+											
+											<div >
+														<button style="width:150px; height: 50px;" type="Submit" class="btn btn-secondary btn-pill mt-1 mb-1">Submit</button>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- app-content -->
+<%- include ('./partials/authentication_footer.ejs') %>
