@@ -2129,7 +2129,7 @@ pre code {
 .form-control:focus {
 	color: #8898aa;
 	border-color: rgba(0, 195, 237, .25);
-	outline: 0;
+	outline: solid;
 	box-shadow: none;
 }
 .form-control:-ms-input-placeholder {
