@@ -6,9 +6,10 @@
   "scripts": {
     "start": "nodemon server.js"
   },
-  "author": "Keval Chauhan",
+  "author": "Iliyas Attarwala - The Great",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^7.0.0",
     "ejs": "^3.0.1",

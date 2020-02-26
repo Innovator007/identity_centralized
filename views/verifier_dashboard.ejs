@@ -1,44 +1,54 @@
-<%- include ('./partials/authentication_header.ejs') %>
+<%- include ('./partials/header.ejs') %>
 
 						<!-- Page content -->
 						<div class="container-fluid pt-8">
 							
 									<div class="card shadow">
 										<div class="card-header">
-											<h2 class="mb-0">Client Details</h2>
+											<h2 class="mb-0">Verify Users</h2>
 										</div>
 										<div class="card-body">
-
-											<div class="form-group">
-												<label class="form-label">Name</label>
-												<input type="text" class="form-control" name="example-text-input" placeholder="Enter name here">
+											<div id="phone-otp-verification" class="form-group">
+												<label class="form-label">Phone</label>
+												<input type="text" id= "phone" class="form-control" name="example-text-input" placeholder="Enter Number">
+												<button onclick="sendOTP()" class="btn btn-primary mt-2">Send OTP</button>
+												<div style="display: none;" class="mt-5 verify-otp-div">
+													<label class="form-label">Enter OTP</label>
+													<input type="text" id="otp" class="form-control" name="example-text-input" placeholder="Enter OTP">
+													<button onclick="verifyOTP()" class="btn btn-primary mt-2">Verify OTP</button>
+												</div>
 											</div>
-
-											<div class="form-group">
-												<label class="form-label">Email Id</label>
-												<input type="text" class="form-control" name="example-text-input" placeholder="Enter mail-id here">
-											</div>
-
-											<div class="form-group">
-												<label class="form-label">Phone Number</label>
-												<input type="text" class="form-control" name="example-text-input" placeholder="Enter number here">
-											</div>
-
-											<div class="form-group">
-												<label class="form-label">Cards</label>
-												<select name="country" id="select-countries" class="form-control custom-select">
-													<option value="br" data-data='{"image": "assets/images/flags/br.svg"}' selected="">Adhar Card</option>
-													<option value="cz" data-data='{"image": "assets/images/flags/cz.svg"}'>Pan Card</option>
-													<option value="de" data-data='{"image": "assets/images/flags/de.svg"}'>Passport</option>
-													<option value="pl" data-data='{"image": "assets/images/flags/pl.svg"}'>Driving License</option>
-
-												</select>
-											</div>
+											<div style="display: none;" id="reference-verification" class="form-group">
+												<label class="form-label">Enter Reference Number: </label>
+												<input type="text" id= "reference" class="form-control" name="example-text-input" placeholder="Enter Reference Number">
+												<div class="form-group mt-2">
+													<label>Select Type:</label>
+													<select id="type" class="form-control select2 w-100" >
+														<option selected="selected" value="aadhar">Aadhar Card</option>
+														<option value="pan">Pan Card</option>
+													</select>
+												</div>
+												<script>
+													function dropSelect(r){ 
+														$('.dropdown-toggle').html(r);
+													  }
+												</script>
+							
+												<button onclick="verifyReferenceNo()" class="btn btn-primary mt-2">Show Details</button>
+											</div>	
 											
-											<div >
-														<button style="width:150px; height: 50px;" type="Submit" class="btn btn-secondary btn-pill mt-1 mb-1">Submit</button>
+											<div style="display: none;" id="reference-details" class="form-group">
+												<img id="user-image" src="" alt="" name="userimg">
+												<div class="details-div"></div>
+												<button onclick="physicalVerify()" class="btn btn-primary mt-2">Next</button>
 											</div>
-											
+
+											<div style="display: none;" id="id-verification" class="form-group">
+												<label class="form-label">Enter ID Number: </label>
+												<input type="text" id= "idnumber" class="form-control" name="example-text-input" placeholder="Enter Id Number">
+												<button onclick="verifyIdentification()" class="btn btn-primary mt-2">Verify</button>
+											</div>	
+
 										</div>
 									</div>
 								</div>
@@ -49,4 +59,142 @@
 				</div>
 			</div>
 			<!-- app-content -->
-<%- include ('./partials/authentication_footer.ejs') %>
+
+
+	<script type="text/javascript">
+		function sendOTP(){
+			var phone = Number($('#phone').val());
+			if(phone && String(phone).length === 10) {
+				$.post("/api/otp/send",
+				{
+					phone
+				},
+				function(data, status){
+					swal({
+						title: "Success",
+						text: "OTP sent successfully!",
+						type: "success"
+					});
+					$(".verify-otp-div").show();
+				});
+			} else {
+				swal({
+						title: "Error",
+						text: "Please enter valid phone",
+						type: "error"
+					});
+			}
+
+		}
+
+
+
+		function verifyOTP(){
+			var phone = Number($('#phone').val());
+			var otp = Number($('#otp').val());
+			if(phone && String(phone).length === 10 && otp && String(otp).length === 4) {
+				$.post("/api/otp/verify",
+				{
+					phone,
+					otp
+				},
+				function(data, status){
+					swal({
+						title: "Success",
+						text: "OTP verification successfull!",
+						type: "success"
+					});
+					$("#phone-otp-verification").hide();
+					$("#reference-verification").show();
+				});
+			} else {
+				swal({
+						title: "Error",
+						text: "Error in phone and otp",
+						type: "error"
+					});
+			}
+
+		}
+
+		function verifyReferenceNo() {
+			var referenceNo = $('#reference').val();
+			var type = $('#type option:selected').val();
+			if(referenceNo && referenceNo.length === 10 && type) {
+				$.post("/api/block/details",
+				{
+					referenceNo,
+					type
+				},
+				function(data, status){
+					$("#reference-verification").hide();
+					console.log(data.data);
+					userDetails(data.data)
+					$("#reference-details").show();
+				});
+			} else {
+				swal({
+					title: "Error",
+					text:"Error in phone and otp",
+					type: "error"
+				});
+			}
+		}
+
+		function userDetails(data){
+			var objectKeys = Object.keys(data);
+			for(var i=0;i<objectKeys.length;i++) {
+				var dataThing = `<p>${objectKeys[i].toUpperCase()}: ${data[objectKeys[i]]}</p>`;
+				$(".details-div").append(dataThing); 
+			}
+
+		}
+
+		function physicalVerify() {
+			$("#reference-details").hide();
+			$("#id-verification").show();
+		}
+
+		function verifyIdentification(){
+			var referenceNo = $('#reference').val();
+			var type = $('#type option:selected').val();
+			var id = $('#idnumber').val();
+
+			if(referenceNo && referenceNo.length === 10 && type && id) {
+				$.post("/api/block/verify",
+				{
+					referenceNo,
+					id,
+					type
+				},
+				function(data, status){
+					if(data.message === "Match") {
+						swal({
+							title: "Success",
+							text: data.message,
+							type: "success"
+						});
+					} else {
+							swal({
+							title: "Error",
+							text: data.message,
+							type: "error"
+						});
+					}
+					setTimeout(function() {
+						window.location.reload()
+					}, 5000); 
+				});
+			} else {
+				swal({
+					title: "Error",
+					text:"Error in phone and otp",
+					type: "error"
+				});
+			}
+		}
+	</script>
+
+	
+
+<%- include ('./partials/footer.ejs') %>

@@ -6,6 +6,12 @@ const Authority = require('../models/authorityModel');
 const Verifier = require('../models/verifierModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const axios = require('axios');
+const MSG91_TEMPLATE_ID = '5e2d1ba3d6fc056bb171f154';
+const MSG91_AUTHKEY = '249056AXhkLvxnnI5e2d273dP1';
+const MSG91_SEND_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp?';
+const MSG91_VERIFY_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp/verify?';
+
 // const sendEmail = require('./../utils/email');
 
 const signToken = id => {
@@ -69,6 +75,7 @@ exports.signupSelect = catchAsync(async (req, res, next) => {
 });
 
 exports.userRegister = catchAsync(async (req, res, next) => {
+  const { referenceNo , id , type } = req.body;
   
   let user = {
     name: req.body.name,
@@ -77,6 +84,12 @@ exports.userRegister = catchAsync(async (req, res, next) => {
     
   }
   const newUser = await User.create(user);
+
+  const resp = await axios.post(`http://localhost:3002/api/mine`, {
+    data,
+
+  });
+  return res.json(resp.data);
   
   createSendToken(newUser, 201, res);
   res.redirect('/dashboard/authority');
@@ -164,12 +177,62 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
-    res.redirect('/dashboard');
+    res.redirect('/dashboard/verifier');
     //createSendToken(user, 200, res);
   }
   
 });
 
+exports.sendOtp = catchAsync(async (req, res, next) => {
+  const phone = req.body.phone;
+  const templateId = MSG91_TEMPLATE_ID;
+  const authKey = MSG91_AUTHKEY;
+  const queryParams = `authkey=${authKey}&template_id=${templateId}&mobile=${phone}&extra_param=`;
+  const SEND_URL = `${MSG91_SEND_OTP_BASE_URL}${queryParams}`;
+  const resp = await axios.get(SEND_URL);
+  if (resp.data.type === "success") {
+    return res.json({ status: 200, message: "OTP send successfully" });
+  } else {
+    return res.json({ status: 500, message: "Error in OTP send" });
+  }
+});
+
+
+exports.verifyOtp = catchAsync(async (req, res, next) => {
+  const { phone, otp } = req.body;
+  const authKey = MSG91_AUTHKEY;
+  const queryParams = `authkey=${authKey}&mobile=${phone}&otp=${otp}`;
+  const VERIFY_URL = `${MSG91_VERIFY_OTP_BASE_URL}${queryParams}`;
+  const resp = await axios.post(VERIFY_URL);
+  if (resp.data.type === "success") {
+    return res.json({ status: 200, message: "OTP verification successfully" });
+  } else {
+    return res.json({ status: 500, message: "Error in OTP verify" });
+  }
+});
+
+
+exports.getBlockDetails = catchAsync(async (req, res, next) => {
+  const { referenceNo, type } = req.body;
+  const resp = await axios.post(`http://localhost:3002/api/block/basic/${referenceNo}`, {
+    type
+  });
+  return res.json(resp.data);
+
+});
+
+exports.verifyBlockDetails = catchAsync(async (req, res, next) => {
+ const { referenceNo , id , type } = req.body;
+ const resp = await axios.post(`http://localhost:3002/api/verify`, {
+   data: {
+    referenceNo,
+    id, 
+    type
+   }
+ });
+ return res.json(resp.data)
+
+});
 
 // exports.updatePassword = catchAsync(async (req, res, next) => {
 //   // 1) Get user from collection

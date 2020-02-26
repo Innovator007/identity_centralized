@@ -10,14 +10,15 @@
 								</ol> -->
 							</div>
 
-							
+							<div class="card shadow">
+								<div class="card-body">
 						<form action="/dashboard/authority" method="POST">
 						<div class="form-group mb-0">
-						<div id="temptest" class="card shadow">
+						<!-- <div id="temptest" class="card shadow">
 										<div class="card-header">
 											<h2 class="mb-0">User Details</h2>
 										</div>
-										<div class="card-body">
+										<!-- <div class="card-body">
 											<div class="row">
 												<div class="col-md-6">
 													<div class="form-group">
@@ -42,9 +43,9 @@
 											
 											
 										</div>
-										
-							</div>
-							<div class="btn-group mt-1 mb-1">
+										 
+							</div> -->
+							<!-- <div class="btn-group mt-1 mb-1">
 								<button style="width:150px; height: 50px;"type="button" id="addNew" class="btn btn-danger">Add new</button>
 								<button style="width:50px; height: 50px;" type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
@@ -68,10 +69,53 @@
 									<label class="custom-control-label" for="cardCheck4">Pan Card</label>
 								</div>
 							</div>
+							</div> -->
+
+							<div class="card" id="aadhar"><div class="card-header">
+								<h2 class="mb-0">Aadhar Details</h2>
 							</div>
-							<button style="margin: 20px;width:150px; height: 50px;" type="Submit" class="btn btn-secondary btn-pill mt-1 mb-1">Submit</button>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="form-label">Aadhar number</label>
+											<input type="text" class="aadhar aadhar-id form-control" name="aadhar-id" placeholder="Enter aadhar number" required> 
+										</div>
+			
+										<div class="form-group">
+											<label class="form-label">Name</label>
+											<input type="text" class="aadhar aadhar-name form-control" name="aadhar-name" placeholder="Enter name as per in aadhar card" required>
+										</div>
+			
+										<div class="form-group">
+											<label class="form-label">Phone number</label>
+											<input type="text" class="aadhar aadhar-phone form-control" name="aadhar-phone" placeholder="Enter Phone NUmber" required>
+										</div>
+
+										<div class="form-group">
+											<label class="form-label">Address</label>
+											<input type="text" class="aadhar aadhar-address form-control" name="aadhar-address" placeholder="Enter Address" required>
+										</div>
+									</div>
+								</div>
+								
+							</div></div>
+							
+							<div id="form-div"></div>
+							<div class="form-group mt-2">
+								<label>Select Type:</label>
+								<select id="type" class="form-control select2 w-100" >
+									<option selected="selected" value="pan">Pan Card</option>
+									<option value="driving">Driving License</option>
+								</select>
+								<button id="addNew" class="btn btn-primary btn-pill mt-2 mb-1">Add</button>
+							</div>
+							
+							<button id="mineBlock" type="Submit" class="btn btn-secondary btn-pill mt-1 mb-1">Submit</button>
 							</div>
 							</form>
+								</div>
+							</div>
 
 							
 						</div>	

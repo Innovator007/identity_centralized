@@ -4,15 +4,6 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-// Sign Up Routers
-///User
-// router.get('/user', (req, res, next) => {
-//     res.render('userSignupForm');
-// });
-// router.post('/user', authController.userSignup);
-
-//Authority
-
 router.get('/', (req, res, next) => {
 	res.redirect('/login');
 });
@@ -37,6 +28,10 @@ router.get('/dashboard/authority', (req, res, next) => {
 	res.render('Auth_dashboard');
 });
 
+router.get('/dashboard/verifier', (req,res, next) => {
+    res.render('verifier_dashboard')
+});
+
 router.post('/dashboard/authority', authController.userRegister);
 
 router.post('/signup/verifier', authController.verSignup);
@@ -50,27 +45,12 @@ router.post('/login', authController.login);
 router.get('/dashboard', authController.dashboard);
 router.post('/api/update/publicKey', authController.updatePublicKey);
 
-// router.post('/forgotPassword', authController.forgotPassword);
-// router.patch('/resetPassword/:token', authController.resetPassword);
+router.post('/api/otp/send', authController.sendOtp);
 
-// router.patch(
-//   '/updateMyPassword',
-//   authController.protect,
-//   authController.updatePassword
-// );
+router.post('/api/otp/verify', authController.verifyOtp);
 
-// router.patch('/updateMe', authController.protect, userController.updateMe);
-// router.delete('/deleteMe', authController.protect, userController.deleteMe);
+router.post('/api/block/details', authController.getBlockDetails);
 
-// router
-//   .route('/')
-//   .get(userController.getAllUsers)
-//   .post(userController.createUser);
-
-// router
-//   .route('/:id')
-//   .get(userController.getUser)
-//   .patch(userController.updateUser)
-//   .delete(userController.deleteUser);
+router.post('/api/block/verify', authController.verifyBlockDetails);
 
 module.exports = router;
