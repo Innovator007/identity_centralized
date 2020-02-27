@@ -74,6 +74,9 @@ router.post('/api/otp/verify', authController.verifyOtp);
 
 router.post('/api/block/details', authController.getBlockDetails);
 
+router.get('/authority/updateForm', authController.updateForm);
+router.post('/authority/updateAddBlock', authController.updateAddBlock);
+
 router.post('/api/block/verify', authController.verifyBlockDetails);
 
 // router.get('/user/details', authController.userDetails);
