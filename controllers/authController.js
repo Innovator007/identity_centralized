@@ -136,9 +136,27 @@ exports.postDashboard = catchAsync(async (req, res, next) => {
   res.render('userDetails', { idData: idData.data.data });
 });
 
-// exports.userDetails = catchAsync(async (req, res, next) => {
-//   return res.render("userDetails", { idData: idData });
-// });
+exports.updateForm = catchAsync(async (req, res, next) => {
+  res.render('updateForm');
+});
+
+exports.updateAddBlock = catchAsync(async (req, res, next) => {
+  const { type, authId, referenceNo, name, phone, email } = req.body;
+  const resp = await axios.post(`http://localhost:3002/api/update`, {
+    authId: authId,
+    referenceNo: referenceNo,
+    update: {
+      type: type,
+      dataUpdation: {
+        name: name,
+        phone: phone,
+        email: email
+      }
+    }
+  });
+
+  return res.redirect('/dashboard/authority');
+});
 
 
 exports.login = catchAsync(async (req, res, next) => {
