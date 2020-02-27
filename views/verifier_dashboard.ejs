@@ -8,7 +8,7 @@
 											<h2 class="mb-0">Verify Users</h2>
 										</div>
 										<div class="card-body">
-											<div id="phone-otp-verification" class="form-group">
+											<!-- <div id="phone-otp-verification" class="form-group">
 												<label class="form-label">Phone</label>
 												<input type="text" id= "phone" class="form-control" name="example-text-input" placeholder="Enter Number">
 												<button onclick="sendOTP()" class="btn btn-primary mt-2">Send OTP</button>
@@ -17,8 +17,8 @@
 													<input type="text" id="otp" class="form-control" name="example-text-input" placeholder="Enter OTP">
 													<button onclick="verifyOTP()" class="btn btn-primary mt-2">Verify OTP</button>
 												</div>
-											</div>
-											<div style="display: none;" id="reference-verification" class="form-group">
+											</div> -->
+											<div  id="reference-verification" class="form-group">
 												<label class="form-label">Enter Reference Number: </label>
 												<input type="text" id= "reference" class="form-control" name="example-text-input" placeholder="Enter Reference Number">
 												<div class="form-group mt-2">
@@ -33,22 +33,16 @@
 														$('.dropdown-toggle').html(r);
 													  }
 												</script>
-							
-												<button onclick="verifyReferenceNo()" class="btn btn-primary mt-2">Show Details</button>
+												<label>Enter Id:</label>
+												<input type="text" id= "idnumber" class="form-control" name="example-text-input" placeholder="Enter Id Number">
+												<button onclick="verifyReferenceNo()" class="btn btn-primary mt-2">Verify Details</button>
 											</div>	
 											
 											<div style="display: none;" id="reference-details" class="form-group">
 												<img id="user-image" src="" alt="" name="userimg">
 												<div class="details-div"></div>
-												<button onclick="physicalVerify()" class="btn btn-primary mt-2">Next</button>
+												<button onclick="physicalVerify()" class="btn btn-primary mt-2">Done</button>
 											</div>
-
-											<div style="display: none;" id="id-verification" class="form-group">
-												<label class="form-label">Enter ID Number: </label>
-												<input type="text" id= "idnumber" class="form-control" name="example-text-input" placeholder="Enter Id Number">
-												<button onclick="verifyIdentification()" class="btn btn-primary mt-2">Verify</button>
-											</div>	
-
 										</div>
 									</div>
 								</div>
@@ -62,73 +56,74 @@
 
 
 	<script type="text/javascript">
-		function sendOTP(){
-			var phone = Number($('#phone').val());
-			if(phone && String(phone).length === 10) {
-				$.post("/api/otp/send",
-				{
-					phone
-				},
-				function(data, status){
-					swal({
-						title: "Success",
-						text: "OTP sent successfully!",
-						type: "success"
-					});
-					$(".verify-otp-div").show();
-				});
-			} else {
-				swal({
-						title: "Error",
-						text: "Please enter valid phone",
-						type: "error"
-					});
-			}
+		// function sendOTP(){
+		// 	var phone = Number($('#phone').val());
+		// 	if(phone && String(phone).length === 10) {
+		// 		$.post("/api/otp/send",
+		// 		{
+		// 			phone
+		// 		},
+		// 		function(data, status){
+		// 			swal({
+		// 				title: "Success",
+		// 				text: "OTP sent successfully!",
+		// 				type: "success"
+		// 			});
+		// 			$(".verify-otp-div").show();
+		// 		});
+		// 	} else {
+		// 		swal({
+		// 				title: "Error",
+		// 				text: "Please enter valid phone",
+		// 				type: "error"
+		// 			});
+		// 	}
 
-		}
+		// }
 
 
 
-		function verifyOTP(){
-			var phone = Number($('#phone').val());
-			var otp = Number($('#otp').val());
-			if(phone && String(phone).length === 10 && otp && String(otp).length === 4) {
-				$.post("/api/otp/verify",
-				{
-					phone,
-					otp
-				},
-				function(data, status){
-					swal({
-						title: "Success",
-						text: "OTP verification successfull!",
-						type: "success"
-					});
-					$("#phone-otp-verification").hide();
-					$("#reference-verification").show();
-				});
-			} else {
-				swal({
-						title: "Error",
-						text: "Error in phone and otp",
-						type: "error"
-					});
-			}
+		// function verifyOTP(){
+		// 	var phone = Number($('#phone').val());
+		// 	var otp = Number($('#otp').val());
+		// 	if(phone && String(phone).length === 10 && otp && String(otp).length === 4) {
+		// 		$.post("/api/otp/verify",
+		// 		{
+		// 			phone,
+		// 			otp
+		// 		},
+		// 		function(data, status){
+		// 			swal({
+		// 				title: "Success",
+		// 				text: "OTP verification successfull!",
+		// 				type: "success"
+		// 			});
+		// 			$("#phone-otp-verification").hide();
+		// 			$("#reference-verification").show();
+		// 		});
+		// 	} else {
+		// 		swal({
+		// 				title: "Error",
+		// 				text: "Error in phone and otp",
+		// 				type: "error"
+		// 			});
+		// 	}
 
-		}
+		// }
 
 		function verifyReferenceNo() {
 			var referenceNo = $('#reference').val();
+			var id = $('#idnumber').val();
 			var type = $('#type option:selected').val();
 			if(referenceNo && referenceNo.length === 10 && type) {
 				$.post("/api/block/details",
 				{
 					referenceNo,
-					type
+					type,
+					id
 				},
 				function(data, status){
 					$("#reference-verification").hide();
-					console.log(data.data);
 					userDetails(data.data)
 					$("#reference-details").show();
 				});
@@ -151,8 +146,7 @@
 		}
 
 		function physicalVerify() {
-			$("#reference-details").hide();
-			$("#id-verification").show();
+			window.location.reload()
 		}
 
 		function verifyIdentification(){

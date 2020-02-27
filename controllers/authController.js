@@ -239,9 +239,16 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
 
 
 exports.getBlockDetails = catchAsync(async (req, res, next) => {
-  const { referenceNo, type } = req.body;
+  const { referenceNo, id, type } = req.body;
   const resp = await axios.post(`http://localhost:3002/api/block/basic/${referenceNo}`, {
     type
+  });
+  const resp_verify = await axios.post(`http://localhost:3002/api/verify`, {
+    data: {
+      referenceNo,
+      id,
+      type
+    }
   });
   return res.json(resp.data);
 
