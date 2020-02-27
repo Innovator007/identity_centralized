@@ -1,11 +1,14 @@
-$(document).ready(function(){
-	var fields = {
+var fields = {
 		pan: 0,
 		driving: 0
 	}
 
-	$("#mineBlock").click(function(e) {
-		e.preventDefault();
+
+
+$(document).ready(function(){
+	
+	$("#mineBlock").click(async function(e) {
+		await e.preventDefault();
 		var data_field_type = {
 			authId: "12345",
 			data: [{
@@ -17,20 +20,18 @@ $(document).ready(function(){
 		}]}
 	
 		for(var i =0; i<Object.keys(fields).length;i++){
-			if(fields[Object.values(fields)[i]] == 1){
+			if(fields[Object.keys(fields)[i]] === 1){
 				var data_field = {
-					type : fields[Object.keys(fields)[i]],
-					id: $(`.${fields[Object.keys(fields)[i]]}-id`).val(),
-					name: $(`.${fields[Object.keys(fields)[i]]}-name`).val(),
-					phone:$(`.${fields[Object.keys(fields)[i]]}-phone`).val(),
-					address:$(`.${fields[Object.keys(fields)[i]]}-address`).val()
+					type : Object.keys(fields)[i],
+					id: $(`.${Object.keys(fields)[i]}-id`).val(),
+					name: $(`.${Object.keys(fields)[i]}-name`).val(),
+					phone:$(`.${Object.keys(fields)[i]}-phone`).val(),
+					address:$(`.${Object.keys(fields)[i]}-address`).val()
 				};
 				data_field_type.data.push(data_field);
 			}
 		}
-		console.log(data_field_type)
 		if(data_field_type) {
-			console.log(data_field_type)
 			$.ajax({
 				url : "/api/signup/user",
 				type: "POST",
@@ -39,11 +40,22 @@ $(document).ready(function(){
 				success: function(data, textStatus, jqXHR)
 				{
 					//data - response from server
-					console.log("jhiijijc")
+					swal({
+						type:"success",
+						title:"Success",
+						text: "Block Added successfully!"
+					})
+					setTimeout(function() {
+						window.location.reload()
+					}, 2000);
 				},
 				error: function (jqXHR, textStatus, errorThrown)
 				{
-					console.log('casjcio')
+					swal({
+						title: "Error",
+						text:"Error in adding block, please try later.",
+						type: "error"
+					});
 				}
 			});
 		} else {
@@ -86,8 +98,8 @@ $(document).ready(function(){
 	});
 
 
-	$("#addNew").click(function(e){
-		e.preventDefault();
+	$("#addNew").click(async function(e){
+		await e.preventDefault();
 		var selected = $("#type option:selected").val();
 		if(selected == "driving" && fields[selected] === 0){
 			const drivinglicenceHtml = `<div class="card" id="DL"><div class="card-header">
