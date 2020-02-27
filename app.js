@@ -39,7 +39,6 @@ app.use(xss());
 // Serving static files
 app.use(express.static('./public/assets'));
 
-
 // 3) ROUTES
 
 app.use('/', userRouter);
