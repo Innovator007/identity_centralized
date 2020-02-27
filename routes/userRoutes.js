@@ -32,7 +32,7 @@ router.get('/dashboard/verifier', (req,res, next) => {
     res.render('verifier_dashboard')
 });
 
-router.post('/signup/user', authController.userRegister);
+router.post('/api/signup/user', authController.userRegister);
 
 router.post('/signup/verifier', authController.verSignup);
 

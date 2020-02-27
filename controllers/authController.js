@@ -31,7 +31,6 @@ const createSendToken = (user, statusCode, res) => {
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
-
   // Remove password from output
   user.password = undefined;
 
@@ -75,7 +74,7 @@ exports.signupSelect = catchAsync(async (req, res, next) => {
 });
 
 exports.userRegister = catchAsync(async (req, res, next) => {
-  console.log(req.body);
+  const { authId, data } = req.body;
   let user = {
     name: data[0].name,
     email: data[0].email,
@@ -85,13 +84,13 @@ exports.userRegister = catchAsync(async (req, res, next) => {
   const newUser = await User.create(user);
 
   const resp = await axios.post(`http://localhost:3002/api/mine`, {
+    userId: newUser.id,
+    authId,
     data
   });
   console.log(resp);
   return res.json(resp.data);
-  
-  createSendToken(newUser, 201, res);
-  res.redirect('/dashboard/authority');
+
 });
 
 exports.authSignup = catchAsync(async (req, res, next) => {
@@ -128,7 +127,7 @@ exports.verSignup = catchAsync(async (req, res, next) => {
 
 
 exports.dashboard = catchAsync(async (req, res, next) => {
-  console.log(typeof req.headers.cookie);
+  console.log(req.headers);
   console.log(req.user);
   var jwts = (req.headers.cookie).substring(4)
   console.log(jwts);
@@ -161,7 +160,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // 3) If everything ok, send token to client
     req.user = user;
     res.redirect('/user/dashboard');
-    //createSendToken(user, 200, res);
+    createSendToken(user, 200, res);
   }
 
   if(req.body.role === 'authority'){

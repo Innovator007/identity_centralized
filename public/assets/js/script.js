@@ -6,15 +6,15 @@ $(document).ready(function(){
 
 	$("#mineBlock").click(function(e) {
 		e.preventDefault();
-		var data = {
-			aadhar: {
+		var data_field_type = {
+			authId: "12345",
+			data: [{
 				type: 'aadhar',
 				id: $('.aadhar-id').val(),
 				name: $('.aadhar-name').val(),
 				phone: $('.aadhar-phone').val(),
 				address: $('.aadhar-address').val() 
-			}
-		}
+		}]}
 	
 		for(var i =0; i<Object.keys(fields).length;i++){
 			if(fields[Object.values(fields)[i]] == 1){
@@ -25,25 +25,17 @@ $(document).ready(function(){
 					phone:$(`.${fields[Object.keys(fields)[i]]}-phone`).val(),
 					address:$(`.${fields[Object.keys(fields)[i]]}-address`).val()
 				};
-				data.push(data_field);
+				data_field_type.data.push(data_field);
 			}
 		}
-		console.log(data)
-		if(data) {
-			console.log(data)
-			// $.post("/signup/user",
-			// {
-			// 	data
-			// },
-			// function(data, status){
-			
-			// 	console.log(data);				
-			// })
-
+		console.log(data_field_type)
+		if(data_field_type) {
+			console.log(data_field_type)
 			$.ajax({
-				url : "/signup/user",
+				url : "/api/signup/user",
 				type: "POST",
-				data : data,
+				contentType: 'application/json',
+				data: JSON.stringify(data_field_type),
 				success: function(data, textStatus, jqXHR)
 				{
 					//data - response from server
