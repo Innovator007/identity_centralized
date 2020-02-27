@@ -4,40 +4,48 @@ $(document).ready(function(){
 		driving: 0
 	}
 
-	var data_structure = {
-		data: [{
-			type: input_fields[Object.keys(input_fields)[i]].selector.substring(1),
-			id: $('aadhar-id'),
-			name: $('aadhar-name'),
-			phone: $('aadhar-phone'),
-			address: $('aadhar-address')
-		}]
-	};
-
 	$("#mineBlock").click(function(e) {
 		e.preventDefault();
+		var data_field_type = {
+			authId: "12345",
+			data: [{
+				type: 'aadhar',
+				id: $('.aadhar-id').val(),
+				name: $('.aadhar-name').val(),
+				phone: $('.aadhar-phone').val(),
+				address: $('.aadhar-address').val() 
+		}]}
+	
 		for(var i =0; i<Object.keys(fields).length;i++){
 			if(fields[Object.values(fields)[i]] == 1){
-				var data = {
+				var data_field = {
 					type : fields[Object.keys(fields)[i]],
-					id: $(`.${fields[Object.keys(fields)[i]]}-id`),
-					name: $(`.${fields[Object.keys(fields)[i]]}-name`),
-					phone:$(`.${fields[Object.keys(fields)[i]]}-phone`),
-					address:$(`.${fields[Object.keys(fields)[i]]}-address`)
+					id: $(`.${fields[Object.keys(fields)[i]]}-id`).val(),
+					name: $(`.${fields[Object.keys(fields)[i]]}-name`).val(),
+					phone:$(`.${fields[Object.keys(fields)[i]]}-phone`).val(),
+					address:$(`.${fields[Object.keys(fields)[i]]}-address`).val()
 				};
-				data_structure.data.append(data);
+				data_field_type.data.push(data_field);
 			}
 		}
-
-		if(data_structure) {
-			$.post("/dashboard/authority",
-			{
-				data_structure
-			},
-			function(data, status){
-			
-				console.log(data);				
-			})
+		console.log(data_field_type)
+		if(data_field_type) {
+			console.log(data_field_type)
+			$.ajax({
+				url : "/api/signup/user",
+				type: "POST",
+				contentType: 'application/json',
+				data: JSON.stringify(data_field_type),
+				success: function(data, textStatus, jqXHR)
+				{
+					//data - response from server
+					console.log("jhiijijc")
+				},
+				error: function (jqXHR, textStatus, errorThrown)
+				{
+					console.log('casjcio')
+				}
+			});
 		} else {
 			swal({
 				title: "Error",

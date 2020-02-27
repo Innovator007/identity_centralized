@@ -32,7 +32,7 @@ router.get('/dashboard/verifier', (req,res, next) => {
     res.render('verifier_dashboard')
 });
 
-router.post('/dashboard/authority', authController.userRegister);
+router.post('/api/signup/user', authController.userRegister);
 
 router.post('/signup/verifier', authController.verSignup);
 
@@ -42,7 +42,7 @@ router.get('/login', (req, res, next) => {
 });
 router.post('/login', authController.login);
 
-router.get('/dashboard', authController.dashboard);
+router.get('/user/dashboard', authController.dashboard);
 router.post('/api/update/publicKey', authController.updatePublicKey);
 
 router.post('/api/otp/send', authController.sendOtp);
