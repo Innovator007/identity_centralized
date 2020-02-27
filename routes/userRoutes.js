@@ -1,7 +1,7 @@
 const express = require('express');
 //const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
-
+const axios = require('axios');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -52,5 +52,12 @@ router.post('/api/otp/verify', authController.verifyOtp);
 router.post('/api/block/details', authController.getBlockDetails);
 
 router.post('/api/block/verify', authController.verifyBlockDetails);
+
+router.get('/blocks', async (req, res, next) => {
+    var idData = await axios('http://localhost:3002/api/basic/blocks');
+
+    res.render('showBlocks',{ idData: idData.data});
+    console.log(idData);
+});
 
 module.exports = router;
