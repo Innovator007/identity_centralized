@@ -48,19 +48,19 @@ const createSendToken = (user, statusCode, res) => {
 
 // 
 exports.updatePublicKey = catchAsync(async (req, res, next) => {
-  console.log(req.body);
+
   User.findOneAndUpdate({
     _id: req.body.userId
   },
-  {
-    block_id: req.body.publicKey
-  }, (error, updatedUser) => {
-    if(error) {
-      console.log("error");
-    } else {
-      createSendToken(updatedUser, 201, res);
-    }
-  })
+    {
+      block_id: req.body.publicKey
+    }, (error, updatedUser) => {
+      if (error) {
+        console.log("error");
+      } else {
+        createSendToken(updatedUser, 201, res);
+      }
+    })
 
 });
 
@@ -77,9 +77,9 @@ exports.userRegister = catchAsync(async (req, res, next) => {
   const { authId, data } = req.body;
   let user = {
     name: data[0].name,
-    email: data[0].email,
-    password: data[0].phone
-    
+    email: data[0].phone,
+    password: data[0].name + data[0].phone
+
   }
   const newUser = await User.create(user);
 
@@ -88,7 +88,7 @@ exports.userRegister = catchAsync(async (req, res, next) => {
     authId,
     data
   });
-  console.log(resp);
+
   return res.json(resp.data);
 
 });
@@ -99,7 +99,7 @@ exports.authSignup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    auth_id : req.body.auth_id
+    auth_id: req.body.auth_id
   }
 
   const newAuthority = await Authority.create(authority);
@@ -115,7 +115,7 @@ exports.verSignup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    ver_id : req.body.ver_id
+    ver_id: req.body.ver_id
   }
 
   const newVerifier = await Verifier.create(verifier);
@@ -127,47 +127,42 @@ exports.verSignup = catchAsync(async (req, res, next) => {
 
 
 exports.dashboard = catchAsync(async (req, res, next) => {
-  console.log(req.headers);
-  console.log(req.user);
-  var jwts = (req.headers.cookie).substring(4)
-  console.log(jwts);
-  var user =  jwt.verify(jwts,process.env.JWT_SECRET)
-  console.log(user.id)
-  var userId = user.id;
-  User.findOne({_id: userId },function(err, founduser) {
-    if(err) {
-      console.log(err);
-    }
-    console.log(founduser)
-    return res.render("dashboard",{user: founduser});
-  });
-  
+  res.render('dashboard');
 });
+
+exports.postDashboard = catchAsync(async (req, res, next) => {
+  var referenceNo = req.query.referenceNo;
+  var idData = await axios(`http://localhost:3002/api/block/${referenceNo}`);
+  res.render('userDetails', { idData: idData.data.data });
+});
+
+// exports.userDetails = catchAsync(async (req, res, next) => {
+//   return res.render("userDetails", { idData: idData });
+// });
 
 
 exports.login = catchAsync(async (req, res, next) => {
-  
-  if(req.body.role === 'user')
-  {
+
+  if (req.body.role === 'user') {
     const { email, password } = req.body;
-    
+
     const user = await User.findOne({ email }).select('+password');
-    
+
     if (!user || !(await user.correctPassword(password, user.password))) {
       return next(new AppError('Incorrect email or password', 401));
     }
-  
+
     // 3) If everything ok, send token to client
     req.user = user;
     res.redirect('/user/dashboard');
     createSendToken(user, 200, res);
   }
 
-  if(req.body.role === 'authority'){
+  if (req.body.role === 'authority') {
 
     const { auth_id, password } = req.body;
 
-    
+
     const authority = await Authority.findOne({ auth_id }).select('+password');
 
     if (!authority || !(await authority.correctPassword(password, authority.password))) {
@@ -179,10 +174,10 @@ exports.login = catchAsync(async (req, res, next) => {
     //createSendToken(user, 200, res);
   }
 
-  if(req.body.role === 'verifier'){
+  if (req.body.role === 'verifier') {
     const { ver_id, password } = req.body;
 
-    
+
     const verifier = await Verifier.findOne({ ver_id }).select('+password');
 
     if (!verifier || !(await verifier.correctPassword(password, verifier.password))) {
@@ -193,7 +188,7 @@ exports.login = catchAsync(async (req, res, next) => {
     res.redirect('/dashboard/verifier');
     //createSendToken(user, 200, res);
   }
-  
+
 });
 
 exports.sendOtp = catchAsync(async (req, res, next) => {
@@ -235,15 +230,15 @@ exports.getBlockDetails = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyBlockDetails = catchAsync(async (req, res, next) => {
- const { referenceNo , id , type } = req.body;
- const resp = await axios.post(`http://localhost:3002/api/verify`, {
-   data: {
-    referenceNo,
-    id, 
-    type
-   }
- });
- return res.json(resp.data)
+  const { referenceNo, id, type } = req.body;
+  const resp = await axios.post(`http://localhost:3002/api/verify`, {
+    data: {
+      referenceNo,
+      id,
+      type
+    }
+  });
+  return res.json(resp.data)
 
 });
 

@@ -12,9 +12,14 @@
 
 							<div class=" card card shadow">
 								<div class="card-body">
-									<h3 class="mb-sm-0">Reference Number :
-									</h3>
-									<%=  user.block_id %>
+									<form action="/user/details" method="GET">
+									<div class="form-group">
+										<label class="form-label">Reference Number</label>
+										<input type="text" id= "referenceNo" class="form-control" name="referenceNo" placeholder="Enter Number">
+										<button type="submit" class="btn btn-primary mt-2">Get Details</button>
+									</div>
+
+									</form>
 								</div>
 							</div>
 					

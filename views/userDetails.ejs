@@ -1,0 +1,23 @@
+<%- include ('./partials/header.ejs') %>
+<div class="container-fluid pt-8">
+    <div class="sortable">
+        <div class="row">
+            <% idData.forEach(function(card){ %>
+            <div class="col-md-12 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-header ">
+                        <h2 class="mb-0 "><%= card.type %></h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <img class="avatar avatar-xxl brround" src="/img/faces/male/18.jpg" alt="avatra-img">
+                            <h4 class="h4 mb-0 mt-3 font-600"><%= card.name %></h4>
+                            <p class=" card-text text-sm"><%= card.serial %></p>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<%- include ('./partials/footer.ejs') %>

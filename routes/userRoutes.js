@@ -43,6 +43,7 @@ router.get('/login', (req, res, next) => {
 router.post('/login', authController.login);
 
 router.get('/user/dashboard', authController.dashboard);
+router.get('/user/details', authController.postDashboard);
 router.post('/api/update/publicKey', authController.updatePublicKey);
 
 router.post('/api/otp/send', authController.sendOtp);
@@ -53,11 +54,12 @@ router.post('/api/block/details', authController.getBlockDetails);
 
 router.post('/api/block/verify', authController.verifyBlockDetails);
 
+// router.get('/user/details', authController.userDetails);
+
 router.get('/blocks', async (req, res, next) => {
     var idData = await axios('http://localhost:3002/api/basic/blocks');
 
     res.render('showBlocks',{ idData: idData.data});
-    console.log(idData);
 });
 
 module.exports = router;
