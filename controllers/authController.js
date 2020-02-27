@@ -11,39 +11,39 @@ const MSG91_TEMPLATE_ID = '5e2d1ba3d6fc056bb171f154';
 const MSG91_AUTHKEY = '249056AXhkLvxnnI5e2d273dP1';
 const MSG91_SEND_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp?';
 const MSG91_VERIFY_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp/verify?';
-
+var sess;
 // const sendEmail = require('./../utils/email');
 
-const signToken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
-  });
-};
+// const signToken = id => {
+//   return jwt.sign({ id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRES_IN
+//   });
+// };
 
-const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user._id);
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true
-  };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+// const createSendToken = (user, statusCode, res) => {
+//   const token = signToken(user._id);
+//   const cookieOptions = {
+//     expires: new Date(
+//       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+//     ),
+//     httpOnly: true
+//   };
+//   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  res.cookie('jwt', token, cookieOptions);
-  // Remove password from output
-  user.password = undefined;
+//   res.cookie('jwt', token, cookieOptions);
+//   // Remove password from output
+//   user.password = undefined;
 
-  // res.status(statusCode).json({
-  //   status: 'success',
-  //   token,
-  //   data: {
-  //     user
-  //   }
-  // });
+//   // res.status(statusCode).json({
+//   //   status: 'success',
+//   //   token,
+//   //   data: {
+//   //     user
+//   //   }
+//   // });
 
-  //res.render('/login');
-};
+//   //res.render('/login');
+// };
 
 
 // 
@@ -58,7 +58,8 @@ exports.updatePublicKey = catchAsync(async (req, res, next) => {
       if (error) {
         console.log("error");
       } else {
-        createSendToken(updatedUser, 201, res);
+        //createSendToken(updatedUser, 201, res);
+        res.redirect('/user/dashboard');
       }
     })
 
@@ -104,7 +105,7 @@ exports.authSignup = catchAsync(async (req, res, next) => {
 
   const newAuthority = await Authority.create(authority);
 
-  createSendToken(newAuthority, 201, res);
+  //createSendToken(newAuthority, 201, res);
   res.redirect('/login');
 
 });
@@ -120,20 +121,29 @@ exports.verSignup = catchAsync(async (req, res, next) => {
 
   const newVerifier = await Verifier.create(verifier);
 
-  createSendToken(newVerifier, 201, res);
+  //createSendToken(newVerifier, 201, res);
   res.redirect('/login');
 
 });
 
 
 exports.dashboard = catchAsync(async (req, res, next) => {
-  res.render('dashboard');
+  const userId = req.session.userId;
+  User.findOne({ 
+  _id: userId }, async function(err, user) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(user)
+      var referenceNo = user.block_id;
+      var idData = await axios(`http://localhost:3002/api/block/${referenceNo}`);
+      res.render('userDetails', { idData: idData.data.data, referenceNo });
+    } 
+  });
 });
 
 exports.postDashboard = catchAsync(async (req, res, next) => {
-  var referenceNo = req.query.referenceNo;
-  var idData = await axios(`http://localhost:3002/api/block/${referenceNo}`);
-  res.render('userDetails', { idData: idData.data.data });
+  console.log(req.session.userId)
 });
 
 // exports.userDetails = catchAsync(async (req, res, next) => {
@@ -142,7 +152,6 @@ exports.postDashboard = catchAsync(async (req, res, next) => {
 
 
 exports.login = catchAsync(async (req, res, next) => {
-
   if (req.body.role === 'user') {
     const { email, password } = req.body;
 
@@ -153,9 +162,10 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
-    req.user = user;
+    req.session.userId = user.id;
+    req.session.type = "user";
     res.redirect('/user/dashboard');
-    createSendToken(user, 200, res);
+    //createSendToken(user, 200, res);
   }
 
   if (req.body.role === 'authority') {
@@ -170,6 +180,8 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
+    req.session.userId = authority.id;
+    req.session.type = "authority";
     res.redirect('/dashboard/authority');
     //createSendToken(user, 200, res);
   }
@@ -185,6 +197,8 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 3) If everything ok, send token to client
+    req.session.userId = verifier.id;
+    req.session.type = "verifier";
     res.redirect('/dashboard/verifier');
     //createSendToken(user, 200, res);
   }
@@ -248,22 +262,3 @@ exports.verifyBlockDetails = catchAsync(async (req, res, next) => {
   return res.json(resp.data)
 
 });
-
-// exports.updatePassword = catchAsync(async (req, res, next) => {
-//   // 1) Get user from collection
-//   const user = await User.findById(req.user.id).select('+password');
-
-//   // 2) Check if POSTed current password is correct
-//   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-//     return next(new AppError('Your current password is wrong.', 401));
-//   }
-
-//   // 3) If so, update password
-//   user.password = req.body.password;
-//   user.passwordConfirm = req.body.passwordConfirm;
-//   await user.save();
-//   // User.findByIdAndUpdate will NOT work as intended!
-
-//   // 4) Log user in, send JWT
-//   createSendToken(user, 200, res);
-// });

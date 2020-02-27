@@ -12,6 +12,13 @@ router.get('/signup', (req, res, next) => {
 	res.render('signupSelect');
 });
 
+router.get('/logout', (req, res, next) => {
+	req.logout();
+	req.session.userId = null;
+	req.session.type = null;
+	res.redirect("/login")
+});
+
 router.post('/signup', authController.signupSelect);
 
 router.get('/signup/authority', (req, res, next) => {
@@ -29,6 +36,7 @@ router.get('/dashboard/authority', (req, res, next) => {
 });
 
 router.get('/dashboard/verifier', (req,res, next) => {
+	console.log(req.session.userId)
     res.render('verifier_dashboard')
 });
 
@@ -38,7 +46,21 @@ router.post('/signup/verifier', authController.verSignup);
 
 //Login
 router.get('/login', (req, res, next) => {
-    res.render('login');
+	// if(req.session.userId) {
+	// 	let url;
+	// 	if(req.session.type === "user") {
+	// 			url = "/user/dashboard";
+	// 	} else if (req.session.type === "authority") {
+	// 		url = "/dashboard/authority";
+	// 	} else {
+	// 		url  = "/dashboard/verifier";
+	// 	}
+	// 	console.log(url)
+	// 	return res.redirect(url);
+	// } else {
+	// 	 res.render('login');
+	// }
+	res.render("login");
 });
 router.post('/login', authController.login);
 

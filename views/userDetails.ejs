@@ -1,5 +1,10 @@
 <%- include ('./partials/header.ejs') %>
 <div class="container-fluid pt-8">
+    <div class="card">
+        <div class="card-body">
+            <h1>Reference Number: <%= referenceNo %></h1>
+        </div>
+    </div>
     <div class="sortable">
         <div class="row">
             <% idData.forEach(function(card){ %>
