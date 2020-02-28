@@ -40,6 +40,8 @@ router.get('/dashboard/verifier', (req,res, next) => {
     res.render('verifier_dashboard')
 });
 
+router.post('/upload/image', authController.uploadFile);
+
 router.post('/api/signup/user', authController.userRegister);
 
 router.post('/signup/verifier', authController.verSignup);

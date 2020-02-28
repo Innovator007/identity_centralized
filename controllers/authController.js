@@ -11,7 +11,9 @@ const MSG91_TEMPLATE_ID = '5e2d1ba3d6fc056bb171f154';
 const MSG91_AUTHKEY = '249056AXhkLvxnnI5e2d273dP1';
 const MSG91_SEND_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp?';
 const MSG91_VERIFY_OTP_BASE_URL = 'https://api.msg91.com/api/v5/otp/verify?';
-var sess;
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 // const sendEmail = require('./../utils/email');
 
 // const signToken = id => {
@@ -47,6 +49,46 @@ var sess;
 
 
 // 
+
+
+
+const ID = 'AKIAJ7I4M44RFIZMEZLQ';
+const SECRET = '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';
+
+// The name of the bucket that you have created
+const BUCKET_NAME = 'identity-blockchain';
+
+aws.config.update({
+  secretAccessKey: SECRET,
+  accessKeyId: ID,
+  region: 'us-east-1'
+});
+
+const s3 = new aws.S3();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
+  }
+}
+
+const upload = multer({
+  fileFilter,
+  storage: multerS3({
+    acl: 'public-read',
+    s3,
+    bucket: BUCKET_NAME,
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: 'TESTING_METADATA'});
+    },
+    key: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+  })
+});
+
 exports.updatePublicKey = catchAsync(async (req, res, next) => {
   User.findOneAndUpdate({
     _id: req.body.userId
@@ -73,6 +115,19 @@ exports.signupSelect = catchAsync(async (req, res, next) => {
   };
   res.redirect(redirectSignup[role]);
 });
+
+const singleUpload = upload.single('image');
+exports.uploadFile = catchAsync(async (req, res) => {
+  // Read content from the file
+  singleUpload(req, res, function(err) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
+    }
+
+    return res.json({'imageUrl': req.file.location});
+  });
+});
+
 
 exports.userRegister = catchAsync(async (req, res, next) => {
   const { authId, data } = req.body;

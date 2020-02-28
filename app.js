@@ -15,7 +15,6 @@ const MongoStore = require('connect-mongo')(session);
 // const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 dotenv.config({ path: './config.env' });
-
 const app = express();
 
 app.set('view engine', 'ejs');
