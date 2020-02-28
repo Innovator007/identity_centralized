@@ -184,7 +184,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // 3) If everything ok, send token to client
     req.session.userId = user.id;
     req.session.type = "user";
-    res.redirect('/user/dashboard');
+    return res.redirect('/user/dashboard');
     //createSendToken(user, 200, res);
   }
 
@@ -202,7 +202,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // 3) If everything ok, send token to client
     req.session.userId = authority.id;
     req.session.type = "authority";
-    res.redirect('/dashboard/authority');
+    return res.redirect('/dashboard/authority');
     //createSendToken(user, 200, res);
   }
 
@@ -219,7 +219,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // 3) If everything ok, send token to client
     req.session.userId = verifier.id;
     req.session.type = "verifier";
-    res.redirect('/dashboard/verifier');
+    return res.redirect('/dashboard/verifier');
     //createSendToken(user, 200, res);
   }
 
