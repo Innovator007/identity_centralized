@@ -48,7 +48,6 @@ var sess;
 
 // 
 exports.updatePublicKey = catchAsync(async (req, res, next) => {
-
   User.findOneAndUpdate({
     _id: req.body.userId
   },
@@ -57,9 +56,10 @@ exports.updatePublicKey = catchAsync(async (req, res, next) => {
     }, (error, updatedUser) => {
       if (error) {
         console.log("error");
+        throw error;
       } else {
         //createSendToken(updatedUser, 201, res);
-        res.redirect('/user/dashboard');
+        res.redirect('/dashboard/authority');
       }
     })
 
@@ -129,16 +129,18 @@ exports.verSignup = catchAsync(async (req, res, next) => {
 
 exports.dashboard = catchAsync(async (req, res, next) => {
   const userId = req.session.userId;
-  User.findOne({ 
-  _id: userId }, async function(err, user) {
-    if(err) {
+  User.findOne({
+    _id: userId
+  }, async function (err, user) {
+    if (err) {
       console.log(err);
     } else {
-      if(user)
-      var referenceNo = user.block_id;
-      var idData = await axios(`http://localhost:3002/api/block/${referenceNo}`);
-      res.render('userDetails', { idData: idData.data.data, referenceNo });
-    } 
+      if (user) {
+        var referenceNo = user.block_id;
+        var idData = await axios(`http://localhost:3002/api/block/${referenceNo}`);
+        res.render('userDetails', { idData: idData.data.data, referenceNo });
+      }
+    }
   });
 });
 

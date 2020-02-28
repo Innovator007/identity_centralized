@@ -31,6 +31,7 @@ $(document).ready(function(){
 				data_field_type.data.push(data_field);
 			}
 		}
+		
 		if(data_field_type) {
 			$.ajax({
 				url : "/api/signup/user",
@@ -40,6 +41,7 @@ $(document).ready(function(){
 				success: function(data, textStatus, jqXHR)
 				{
 					//data - response from server
+					
 					swal({
 						type:"success",
 						title:"Success",
@@ -49,7 +51,7 @@ $(document).ready(function(){
 						window.location.reload()
 					}, 2000);
 				},
-				error: function (jqXHR, textStatus, errorThrown)
+				error: function(jqXHR, textStatus, errorThrown)
 				{
 					swal({
 						title: "Error",
