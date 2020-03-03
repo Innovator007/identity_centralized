@@ -139,10 +139,17 @@
 		}
 
 		function userDetails(data){
+		
 			var objectKeys = Object.keys(data);
 			for(var i=0;i<objectKeys.length;i++) {
-				var dataThing = `<p>${objectKeys[i].toUpperCase()}: ${data[objectKeys[i]]}</p>`;
-				$(".details-div").append(dataThing); 
+				if(objectKeys[i] === "imageUrl") {
+					var img = document.createElement('img');
+					img.src = data[objectKeys[i]];
+					$(".details-div").append(img);
+				} else {
+					var dataThing = `<p>${objectKeys[i].toUpperCase()}: ${data[objectKeys[i]]}</p>`;
+				$(".details-div").append(dataThing);
+				} 
 			}
 
 		}

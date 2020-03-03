@@ -2,15 +2,53 @@ var fields = {
 		pan: 0,
 		driving: 0
 	}
-
-
+var imageUrl = "";
 
 $(document).ready(function(){
 	
+	$("#uploadFile").click(function(e) {
+		e.preventDefault();
+		var fd = new FormData();
+		var file = $('#image-field').prop('files')[0];
+		fd.append('image',file);
+
+		$.ajax({
+			url : "/upload/image",
+			type: "POST",
+			processData: false,
+			contentType: false,
+			data: fd,
+			success: function(data, textStatus, jqXHR)
+			{
+				//data - response from server
+				
+				setimageurl(data);
+		
+			},
+			error: function(jqXHR, textStatus, errorThrown)
+			{
+				swal({
+					title: "Error",
+					text:"Error in adding block, please try later.",
+					type: "error"
+				});
+			}
+		});
+	});
+
+	function setimageurl(imageUrlVal) {
+		console.log(imageUrlVal);
+		imageUrl = imageUrlVal.imageUrl;
+
+	}
+
 	$("#mineBlock").click(async function(e) {
+
+		
 		await e.preventDefault();
 		var data_field_type = {
 			authId: "12345",
+			imageUrl: imageUrl,
 			data: [{
 				type: 'aadhar',
 				id: $('.aadhar-id').val(),
@@ -38,6 +76,7 @@ $(document).ready(function(){
 				type: "POST",
 				contentType: 'application/json',
 				data: JSON.stringify(data_field_type),
+				mimeTypes:"multipart/form-data",
 				success: function(data, textStatus, jqXHR)
 				{
 					//data - response from server
@@ -47,9 +86,9 @@ $(document).ready(function(){
 						title:"Success",
 						text: "Block Added successfully!"
 					})
-					setTimeout(function() {
-						window.location.reload()
-					}, 2000);
+					// setTimeout(function() {
+					// 	window.location.reload()
+					// }, 2000);
 				},
 				error: function(jqXHR, textStatus, errorThrown)
 				{

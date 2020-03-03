@@ -1,5 +1,5 @@
 <%- include ('./partials/authorityHeader.ejs') %>
-
+	<input type="hidden" id="image-url">
 						<!-- Page content -->
 						<div class="container-fluid pt-8">
 							<div class="page-header mt-0  p-3">
@@ -12,7 +12,8 @@
 
 							<div class="card shadow">
 								<div class="card-body">
-						<form action="/dashboard/authority" method="POST">
+									
+						<form action="/dashboard/authority" method="POST" enctype="multipart/form-data">
 						<div class="form-group mb-0">
 						<!-- <div id="temptest" class="card shadow">
 										<div class="card-header">
@@ -77,6 +78,10 @@
 							<div class="card-body">
 								<div class="row">
 									<div class="col-md-6">
+										<form id="upload-form" action="/dashboard/authority" method="POST" enctype="multipart/form-data">
+											<input id="image-field" type="file" name="image">
+											<button class="btn btn-primary" id="uploadFile">Upload</button>
+										</form>
 										<div class="form-group">
 											<label class="form-label">Aadhar number</label>
 											<input type="text" class="aadhar aadhar-id form-control" name="aadhar-id" placeholder="Enter aadhar number" required> 

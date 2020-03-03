@@ -123,14 +123,14 @@ exports.uploadFile = catchAsync(async (req, res) => {
     if (err) {
       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
     }
-
+    
     return res.json({'imageUrl': req.file.location});
   });
 });
 
 
 exports.userRegister = catchAsync(async (req, res, next) => {
-  const { authId, data } = req.body;
+  const { authId, data, imageUrl } = req.body;
   let user = {
     name: data[0].name,
     email: data[0].phone,
@@ -138,11 +138,12 @@ exports.userRegister = catchAsync(async (req, res, next) => {
 
   }
   const newUser = await User.create(user);
-
+  console.log(imageUrl);
   const resp = await axios.post(`http://localhost:3002/api/mine`, {
     userId: newUser.id,
     authId,
-    data
+    data,
+    imageUrl
   });
 
   return res.json(resp.data);
