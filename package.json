@@ -9,7 +9,7 @@
   "author": "Iliyas Attarwala - The Great",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.628.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^3.2.0",
